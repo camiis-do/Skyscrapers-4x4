@@ -1,4 +1,0 @@
-﻿  skyscrapers.cpp
-c:\users\morga\desktop\skyscrapers.cpp(247): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-  skyscrapers.vcxproj -> C:\Users\morga\Documents\Visual Studio 2015\Projects\skyscrapers\Debug\skyscrapers.exe
-  skyscrapers.vcxproj -> C:\Users\morga\Documents\Visual Studio 2015\Projects\skyscrapers\Debug\skyscrapers.pdb (Partial PDB)
