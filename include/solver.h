@@ -9,4 +9,4 @@ public:
     static void DeleteGrid(int** grid);
 private:
     static int** ConvertGrid(int** grid);
-}
+};
