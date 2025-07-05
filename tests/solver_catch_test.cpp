@@ -1,6 +1,7 @@
 //Task is
 //https://www.codewars.com/kata/4-by-4-skyscrapers
 
+#include "solver.h"
 #include <catch2/catch_test_macros.hpp>
 #include <iostream>
 
