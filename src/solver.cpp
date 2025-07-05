@@ -1,11 +1,12 @@
 //Task is
 //https://www.codewars.com/kata/4-by-4-skyscrapers
 
-
+#include "solver.h"
 #include <iostream>
 #include <cmath>
 
-using namespace std;
+using std::cout;
+using std::endl;
 
 const int ONE   = 0b0001; // 1
 const int TWO   = 0b0010; // 2
@@ -31,10 +32,10 @@ void PrintCellBits(int val) {
     cout << "]";
 }
 
-void PrintGrid(int** grid) {
+void Solver::PrintGrid(int** grid) {
     cout << "Current Grid State:\n";
-    for (int i = 0; i < 4; i++) {
-        for (int j = 0; j < 4; j++) {
+    for (int i = 0; i < N; i++) {
+        for (int j = 0; j < N; j++) {
             PrintCellBits(grid[i][j]);
             cout << " ";
         }
@@ -43,17 +44,25 @@ void PrintGrid(int** grid) {
     cout << endl;
 }
 
-int** ConvertGrid(int** grid)
+int** Solver::ConvertGrid(int** grid)
 {
-  for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 4; j++) {
+  for (int i = 0; i < N; i++) {
+    for (int j = 0; j < N; j++) {
       ConvertCellBits(grid[i][j]);
     }
   }
   return grid;
 }
 
-int** SolvePuzzle(int *clues)
+void Solver::DeleteGrid(int** grid)
+{
+	for (int i = 0; i < N; i++) {
+		delete[] res[i];
+	}
+	delete[] res;
+}
+
+int** Solver::SolvePuzzle(int *clues)
 {
 	int **res = new int*[N];
 	for (int i = 0; i < N; i++)
@@ -97,7 +106,7 @@ int** SolvePuzzle(int *clues)
 			}
 			case 2:
 			{
-				*line[i][0] &= ~FOUR; // Remove FOUR from line[i][0] if it's still a possible value
+				*line[i][0] &= ~FOUR; // Remove 4 from line[i][0] if it's still a possible value
 
 				if (*line[i][3] == FOUR) {
 					*line[i][0] = THREE;
@@ -223,26 +232,4 @@ int** SolvePuzzle(int *clues)
 		}		
 	}
 	return ConvertGrid(res);
-}
-
-int main()
-{
-
-	int clues[][N_sqr] = {
-	{ 2, 2, 1, 3,
-	2, 2, 3, 1,
-	1, 2, 2, 3,
-	3, 2, 1, 3 }
-	};
-	
-	int **b = SolvePuzzle(clues[0]);
-	PrintGrid(b);
-
-	for (int i = 0; i < N; i++) {
-		delete[] res[i];
-	}
-	delete[] res;
-	
-	system("pause");
-	return 0;
 }
