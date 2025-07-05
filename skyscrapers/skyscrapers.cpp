@@ -13,6 +13,9 @@ const int THREE = 0b0100; // 3
 const int FOUR  = 0b1000; // 4
 const int ALL   = ONE | TWO | THREE | FOUR; // 0b1111
 
+constexpr int N = 4;
+constexpr int N_sqr = N * N;
+
 int ConvertCellBits(int val)
 {
   if (val & ONE) 	return 1;
@@ -52,15 +55,15 @@ int** ConvertGrid(int** grid)
 
 int** SolvePuzzle(int *clues)
 {
-	int **res = new int*[4];
-	for (int i = 0; i < 4; i++)
+	int **res = new int*[N];
+	for (int i = 0; i < N; i++)
 	{
-		res[i] = new int[4];
-		for (int j = 0; j < 4; j++)
+		res[i] = new int[N];
+		for (int j = 0; j < N; j++)
 			res[i][j] = ALL;
 	}
 
-	int *line[16][4] = { { &res[0][0], &res[1][0], &res[2][0], &res[3][0] },
+	int *line[N_sqr][N] = { { &res[0][0], &res[1][0], &res[2][0], &res[3][0] },
 	{ &res[0][1], &res[1][1], &res[2][1], &res[3][1] },
 	{ &res[0][2], &res[1][2], &res[2][2], &res[3][2] },
 	{ &res[0][3], &res[1][3], &res[2][3], &res[3][3] },
@@ -81,9 +84,9 @@ int** SolvePuzzle(int *clues)
 	{ &res[0][0], &res[0][1], &res[0][2], &res[0][3] } };
 
 	int count = 0;
-	while (count < 16)
+	while (count < N_sqr)
 	{
-		for (int i = 0; i < 16; i++)
+		for (int i = 0; i < N_sqr; i++)
 		{
 			switch (clues[i])
 			{
@@ -179,8 +182,8 @@ int** SolvePuzzle(int *clues)
 		}
 		count = 0;
 
-		for (int i = 0; i < 4; i++) {
-			for (int j = 0; j < 4; j++) {
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
 				int val = res[i][j];
 		
 				// If only one value remains (definitive), eliminate it from same row and column
@@ -196,9 +199,9 @@ int** SolvePuzzle(int *clues)
 		
 		// Go through first 8 clues (lines from each direction) to identify if any value occurs exactly once
 		for (int i = 0; i < 8; i++) {
-			int countBits[4] = {0};
+			int countBits[N] = {0};
 		
-			for (int j = 0; j < 4; j++) {
+			for (int j = 0; j < N; j++) {
 				int val = *line[i][j];
 				if (val & ONE)   countBits[0]++;
 				if (val & TWO)   countBits[1]++;
@@ -207,9 +210,9 @@ int** SolvePuzzle(int *clues)
 			}
 		
 			// For each value (1–4), if it occurs only once, assign it to that cell
-			for (int v = 0; v < 4; v++) {
+			for (int v = 0; v < N; v++) {
 				if (countBits[v] == 1) {
-					for (int j = 0; j < 4; j++) {
+					for (int j = 0; j < N; j++) {
 						if (*line[i][j] & (1 << v)) {
 							*line[i][j] = (1 << v);
 							break;
@@ -225,7 +228,7 @@ int** SolvePuzzle(int *clues)
 int main()
 {
 
-	int clues[][16] = {
+	int clues[][N_sqr] = {
 	{ 2, 2, 1, 3,
 	2, 2, 3, 1,
 	1, 2, 2, 3,
@@ -235,7 +238,7 @@ int main()
 	int **b = SolvePuzzle(clues[0]);
 	PrintGrid(b);
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < N; i++) {
 		delete[] res[i];
 	}
 	delete[] res;
