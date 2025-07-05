@@ -36,3 +36,10 @@ enable_testing()
 if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/tests/CMakeLists.txt")
     add_subdirectory(tests)
 endif()
+
+add_library(solver_lib
+  src/solver.cpp
+  include/solver.h
+)
+
+target_include_directories(solver_lib PUBLIC include)
