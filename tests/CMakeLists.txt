@@ -1,7 +1,5 @@
-
 add_executable(solver_catch_test solver_catch_test.cpp)
-
-target_link_libraries(solver_catch_test PRIVATE Catch2::Catch2WithMain)
+target_link_libraries(solver_catch_test PRIVATE solver_lib Catch2::Catch2WithMain)
 
 include(CTest)
 include(Catch)
