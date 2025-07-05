@@ -38,7 +38,7 @@ TEST_CASE( "Clues match outcomes", "[equal]" ) {
     for (int i = 0; i < numClueSets; ++i)
 	{
         int **b = Solver::SolvePuzzle(clues[i]);
-        REQUIRE( equal(b, outcomes[i]) );
+        REQUIRE( equal(b, outcomes[i]) == 0 );
         Solver::PrintGrid(b);
         Solver::DeleteGrid(b);
     }
