@@ -57,40 +57,40 @@ int** Solver::ConvertGrid(int** grid)
 void Solver::DeleteGrid(int** grid)
 {
 	for (int i = 0; i < N; i++) {
-		delete[] res[i];
+		delete[] grid[i];
 	}
-	delete[] res;
+	delete[] grid;
 }
 
 int** Solver::SolvePuzzle(int *clues)
 {
-	int **res = new int*[N];
+	int **grid = new int*[N];
 	for (int i = 0; i < N; i++)
 	{
-		res[i] = new int[N];
+		grid[i] = new int[N];
 		for (int j = 0; j < N; j++)
-			res[i][j] = ALL;
+			grid[i][j] = ALL;
 	}
 
-	int *line[N_sqr][N] = { { &res[0][0], &res[1][0], &res[2][0], &res[3][0] },
-	{ &res[0][1], &res[1][1], &res[2][1], &res[3][1] },
-	{ &res[0][2], &res[1][2], &res[2][2], &res[3][2] },
-	{ &res[0][3], &res[1][3], &res[2][3], &res[3][3] },
+	int *line[N_sqr][N] = { { &grid[0][0], &grid[1][0], &grid[2][0], &grid[3][0] },
+	{ &grid[0][1], &grid[1][1], &grid[2][1], &grid[3][1] },
+	{ &grid[0][2], &grid[1][2], &grid[2][2], &grid[3][2] },
+	{ &grid[0][3], &grid[1][3], &grid[2][3], &grid[3][3] },
 
-	{ &res[0][3], &res[0][2], &res[0][1], &res[0][0] },
-	{ &res[1][3], &res[1][2], &res[1][1], &res[1][0] },
-	{ &res[2][3], &res[2][2], &res[2][1], &res[2][0] },
-	{ &res[3][3], &res[3][2], &res[3][1], &res[3][0] },
+	{ &grid[0][3], &grid[0][2], &grid[0][1], &grid[0][0] },
+	{ &grid[1][3], &grid[1][2], &grid[1][1], &grid[1][0] },
+	{ &grid[2][3], &grid[2][2], &grid[2][1], &grid[2][0] },
+	{ &grid[3][3], &grid[3][2], &grid[3][1], &grid[3][0] },
 
-	{ &res[3][3], &res[2][3], &res[1][3], &res[0][3] },
-	{ &res[3][2], &res[2][2], &res[1][2], &res[0][2] },
-	{ &res[3][1], &res[2][1], &res[1][1], &res[0][1] },
-	{ &res[3][0], &res[2][0], &res[1][0], &res[0][0] },
+	{ &grid[3][3], &grid[2][3], &grid[1][3], &grid[0][3] },
+	{ &grid[3][2], &grid[2][2], &grid[1][2], &grid[0][2] },
+	{ &grid[3][1], &grid[2][1], &grid[1][1], &grid[0][1] },
+	{ &grid[3][0], &grid[2][0], &grid[1][0], &grid[0][0] },
 
-	{ &res[3][0], &res[3][1], &res[3][2], &res[3][3] },
-	{ &res[2][0], &res[2][1], &res[2][2], &res[2][3] },
-	{ &res[1][0], &res[1][1], &res[1][2], &res[1][3] },
-	{ &res[0][0], &res[0][1], &res[0][2], &res[0][3] } };
+	{ &grid[3][0], &grid[3][1], &grid[3][2], &grid[3][3] },
+	{ &grid[2][0], &grid[2][1], &grid[2][2], &grid[2][3] },
+	{ &grid[1][0], &grid[1][1], &grid[1][2], &grid[1][3] },
+	{ &grid[0][0], &grid[0][1], &grid[0][2], &grid[0][3] } };
 
 	int count = 0;
 	while (count < N_sqr)
@@ -193,13 +193,13 @@ int** Solver::SolvePuzzle(int *clues)
 
 		for (int i = 0; i < N; i++) {
 			for (int j = 0; j < N; j++) {
-				int val = res[i][j];
+				int val = grid[i][j];
 		
 				// If only one value remains (definitive), eliminate it from same row and column
 				if (__builtin_popcount(val) == 1) {
 					for (int k = 0; k < 4; k++) {
-						if (k != i) res[k][j] &= ~val;
-						if (k != j) res[i][k] &= ~val;
+						if (k != i) grid[k][j] &= ~val;
+						if (k != j) grid[i][k] &= ~val;
 					}
 					++count;
 				}
@@ -231,5 +231,5 @@ int** Solver::SolvePuzzle(int *clues)
 			}
 		}		
 	}
-	return ConvertGrid(res);
+	return ConvertGrid(grid);
 }
