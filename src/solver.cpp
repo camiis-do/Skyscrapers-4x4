@@ -48,7 +48,7 @@ int** Solver::ConvertGrid(int** grid)
 {
   for (int i = 0; i < N; i++) {
     for (int j = 0; j < N; j++) {
-      ConvertCellBits(grid[i][j]);
+		grid[i][j] = ConvertCellBits(grid[i][j]);
     }
   }
   return grid;
