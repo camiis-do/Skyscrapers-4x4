@@ -15,10 +15,9 @@ constexpr int N_sqr = N * N;
 
 template<typename Functor>
 int** callWithTimeout(Functor functor, int clues[N_sqr], int timeout_ms, bool& timedOut) {
-    int clues_copy[N_sqr];
-    std::copy(clues, clues + N_sqr, clues_copy);
-
     std::packaged_task<int**()> task([=]() {
+        int clues_copy[N_sqr];
+        std::copy(clues, clues + N_sqr, clues_copy);
         return functor(clues_copy);
     });
 
@@ -87,12 +86,13 @@ void generateRandomClues(int clues[N_sqr]) {
 
 TEST_CASE("Random clues produce valid solution") {
     for (int t = 0; t < 100; ++t) {
-        bool timedOut = false;
         int clues[N_sqr];
         generateRandomClues(clues);
 
+        bool timedOut = false;
         int** solution = callWithTimeout(Solver::SolvePuzzle, clues, 50, timedOut);
         REQUIRE_FALSE(timedOut);
+        
         CHECK(isValidGrid(solution));
         for (int i = 0; i < N_sqr; ++i)
         {
