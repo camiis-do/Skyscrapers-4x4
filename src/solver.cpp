@@ -241,34 +241,34 @@ int** Solver::SolvePuzzle(int *clues)
 		}
 		
 		for (int i = 0; i < 8; i++) {
-		int countBits[N] = {0};
-		for (int j = 0; j < N; j++) {
-			int val = *line[i][j];
-			if (val & ONE)   countBits[0]++;
-			if (val & TWO)   countBits[1]++;
-			if (val & THREE) countBits[2]++;
-			if (val & FOUR)  countBits[3]++;
-		}
+			int countBits[N] = {0};
+			for (int j = 0; j < N; j++) {
+				int val = *line[i][j];
+				if (val & ONE)   countBits[0]++;
+				if (val & TWO)   countBits[1]++;
+				if (val & THREE) countBits[2]++;
+				if (val & FOUR)  countBits[3]++;
+			}
 
-		for (int v = 0; v < N; v++) {
-			if (countBits[v] == 1) {
-				for (int j = 0; j < N; j++) {
-					if (*line[i][j] & (1 << v)) {
-						int bit = (1 << v);
-						*line[i][j] = bit;
-						++count;
+			for (int v = 0; v < N; v++) {
+				if (countBits[v] == 1) {
+					for (int j = 0; j < N; j++) {
+						if (*line[i][j] & (1 << v)) {
+							int bit = (1 << v);
+							*line[i][j] = bit;
+							++count;
 
-						int row = -1, col = -1;
-						for (int r = 0; r < N; ++r)
-							for (int c = 0; c < N; ++c)
-								if (&grid[r][c] == line[i][j])
-									row = r, col = c;
-						
-						if (row != -1 && col != -1)
-							EliminateFromPeers(grid, row, col, bit);
-						break;
+							int row = -1, col = -1;
+							for (int r = 0; r < N; ++r)
+								for (int c = 0; c < N; ++c)
+									if (&grid[r][c] == line[i][j])
+										row = r, col = c;
+							
+							if (row != -1 && col != -1)
+								EliminateFromPeers(grid, row, col, bit);
+							break;
+						}
 					}
-
 				}
 			}
 		}
