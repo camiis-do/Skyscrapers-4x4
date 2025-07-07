@@ -135,7 +135,7 @@ TEST_CASE("Integrated solve and format") {
         2, 2, 3, 1
     };
 
-    int** solution = SolvePuzzle(clues);
+    int** solution = Solver::SolvePuzzle(clues);
     REQUIRE(isValidGrid(solution));
 
     std::stringstream ss;
