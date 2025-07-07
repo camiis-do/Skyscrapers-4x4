@@ -9,4 +9,5 @@ public:
     static void DeleteGrid(int** grid);
 private:
     static int** ConvertGrid(int** grid);
+    static void EliminateFromPeers(int** grid, int row, int col, int bitmask);
 };
