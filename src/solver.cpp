@@ -56,16 +56,28 @@ int** Solver::ConvertGrid(int** grid)
 
 void Solver::DeleteGrid(int** grid)
 {
+	if (!grid)
+	{
+		return;
+	}
 	for (int i = 0; i < N; i++) {
 		delete[] grid[i];
 	}
 	delete[] grid;
 }
 
-void Solver::EliminateFromPeers(int** grid, int row, int col, int bitmask) {
+void Solver::PropagateConstaints(int** grid, int row, int col, int bitmask) {
     for (int i = 0; i < N; ++i) {
-        if (i != row) grid[i][col] &= ~bitmask;
-        if (i != col) grid[row][i] &= ~bitmask;
+        if (i != row)
+        {
+            if (__builtin_popcount(grid[i][col]) == 1) continue;
+            grid[i][col] &= ~bitmask;
+        }
+        if (i != col)
+        {
+            if (__builtin_popcount(grid[row][i]) == 1) continue;
+            grid[row][i] &= ~bitmask;
+        }
     }
 }
 
@@ -113,7 +125,13 @@ int** Solver::SolvePuzzle(int *clues)
 			}
 			case 2:
 			{
-				*line[i][0] &= ~FOUR; // Remove 4 from line[i][0] if it's still a possible value
+			    if (__builtin_popcount(*line[i][0]) > 1)
+				    *line[i][0] &= ~FOUR;
+				else
+				{
+					DeleteGrid(grid);
+					return nullptr;
+				}
 
 				if (*line[i][3] == FOUR) {
 					*line[i][0] = THREE;
@@ -132,17 +150,47 @@ int** Solver::SolvePuzzle(int *clues)
 						*line[i][1] = TWO;
 						*line[i][3] = ONE;
 					} else {
-						*line[i][0] &= ~ONE;
-						*line[i][1] &= ~THREE;
+					    if (__builtin_popcount(*line[i][0]) > 1)
+						    *line[i][0] &= ~ONE;
+						else
+						{
+							DeleteGrid(grid);
+							return nullptr;
+						}
+						if (__builtin_popcount(*line[i][1]) > 1)
+						    *line[i][1] &= ~THREE;
+						else
+						{
+							DeleteGrid(grid);
+							return nullptr;
+						}
 					}
 				}
 				break;
 			}
 			case 3:
 			{
-				*line[i][0] &= ~FOUR;
-				*line[i][0] &= ~THREE;
-				*line[i][1] &= ~FOUR;
+				if (__builtin_popcount(*line[i][0]) > 1)
+					*line[i][0] &= ~FOUR;
+				else
+				{
+					DeleteGrid(grid);
+					return nullptr;
+				}
+				if (__builtin_popcount(*line[i][0]) > 1)
+					*line[i][0] &= ~THREE;
+				else
+				{
+					DeleteGrid(grid);
+					return nullptr;
+				}
+				if (__builtin_popcount(*line[i][1]) > 1)
+					*line[i][1] &= ~FOUR;
+				else
+				{
+					DeleteGrid(grid);
+					return nullptr;
+				}
 
 				if (*line[i][3] == FOUR)
 				{
@@ -151,7 +199,8 @@ int** Solver::SolvePuzzle(int *clues)
 						*line[i][0] = TWO;
 						*line[i][1] = ONE;
 						*line[i][2] = THREE;
-					} else if (*line[i][0] == ONE || *line[i][2] == TWO)
+					}
+					else if (*line[i][0] == ONE || *line[i][2] == TWO)
 					{
 						*line[i][0] = ONE;
 						*line[i][1] = THREE;
@@ -265,7 +314,7 @@ int** Solver::SolvePuzzle(int *clues)
 										row = r, col = c;
 							
 							if (row != -1 && col != -1)
-								EliminateFromPeers(grid, row, col, bit);
+								PropagateConstaints(grid, row, col, bit);
 							break;
 						}
 					}

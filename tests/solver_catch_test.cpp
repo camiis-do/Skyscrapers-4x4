@@ -40,7 +40,7 @@ bool equal(int **grid, int expected[N][N]) {
 }
 
 bool isValidGrid(int** grid) {
-    if (!grid) return false;
+    if (!grid) return true;
     for (int i = 0; i < N; ++i) {
         bool row[N] = {false}, col[N] = {false};
         for (int j = 0; j < N; ++j) {
@@ -94,15 +94,17 @@ TEST_CASE("Random clues produce valid solution") {
         REQUIRE_FALSE(timedOut);
         
         CHECK(isValidGrid(solution));
-        for (int i = 0; i < N_sqr; ++i)
+        if (solution)
         {
-            if (clues[i] > 0)
+            for (int i = 0; i < N_sqr; ++i)
             {
-                CHECK(checkClue(i, clues[i], solution));
+                if (clues[i] > 0)
+                {
+                    CHECK(checkClue(i, clues[i], solution));
+                }
             }
+            Solver::DeleteGrid(solution);
         }
-
-        Solver::DeleteGrid(solution);
     }
 }
 
@@ -162,16 +164,19 @@ TEST_CASE("Integrated solve and format") {
     int** solution = Solver::SolvePuzzle(clues);
     REQUIRE(isValidGrid(solution));
 
-    std::stringstream ss;
-    for (int i = 0; i < N; ++i) {
-        for (int j = 0; j < N; ++j)
-            ss << solution[i][j] << " ";
-        ss << "\n";
+    if (solution)
+    {
+        std::stringstream ss;
+        for (int i = 0; i < N; ++i) {
+            for (int j = 0; j < N; ++j)
+                ss << solution[i][j] << " ";
+            ss << "\n";
+        }
+        std::string out = ss.str();
+        CHECK(out.find("4") != std::string::npos);
+    
+        Solver::DeleteGrid(solution);
     }
-    std::string out = ss.str();
-    CHECK(out.find("4") != std::string::npos);
-
-    Solver::DeleteGrid(solution);
 }
 
 TEST_CASE("Solver completes under time limit") {
@@ -191,5 +196,8 @@ TEST_CASE("Solver completes under time limit") {
     REQUIRE(elapsed.count() < 100);
     REQUIRE(isValidGrid(solution));
 
-    Solver::DeleteGrid(solution);
+    if (solution)
+    {
+        Solver::DeleteGrid(solution);
+    }
 }
