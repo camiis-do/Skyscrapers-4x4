@@ -315,7 +315,7 @@ int** Solver::SolvePuzzle(int *clues)
 							
 							if (row != -1 && col != -1)
 							{
-								if (!PropagateConstaints(grid, row, col, bit))
+								if (!PropagateConstraints(grid, row, col, bit))
 								{
 									DeleteGrid(grid);
 									return nullptr;
