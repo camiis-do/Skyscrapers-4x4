@@ -66,7 +66,7 @@ void Solver::DeleteGrid(int** grid)
 	delete[] grid;
 }
 
-bool Solver::PropagateConstaints(int** grid, int row, int col, int bitmask) {
+bool Solver::PropagateConstraints(int** grid, int row, int col, int bitmask) {
     for (int i = 0; i < N; ++i) {
         if (i != row)
         {
