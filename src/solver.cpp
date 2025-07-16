@@ -268,10 +268,11 @@ int** Solver::SolvePuzzle(int *clues)
 		
 				// If only one value remains (definitive), eliminate it from same row and column
 				if (__builtin_popcount(val) == 1) {
-					for (int k = 0; k < 4; k++) {
-						if (k != i) grid[k][j] &= ~val;
-						if (k != j) grid[i][k] &= ~val;
-					}
+				    if (!PropagateConstraints(grid, i, j, val))
+				    {
+    					DeleteGrid(grid);
+    					return nullptr;
+				    }
 					++count;
 				}
 			}
