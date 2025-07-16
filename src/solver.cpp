@@ -66,19 +66,34 @@ void Solver::DeleteGrid(int** grid)
 	delete[] grid;
 }
 
-bool Solver::PropagateConstraints(int** grid, int row, int col, int bitmask) {
+bool Solver::PropagateConstaints(int** grid, int row, int col, int bitmask) {
     for (int i = 0; i < N; ++i) {
         if (i != row)
         {
-            if (__builtin_popcount(grid[i][col]) == 1) return false;
-            grid[i][col] &= ~bitmask;
+            if (__builtin_popcount(grid[i][col]) == 1)
+            {
+                if (grid[i][col] == bitmask)
+                    return false;
+            }
+            else
+            {
+                grid[i][col] &= ~bitmask;
+            }
         }
         if (i != col)
         {
-            if (__builtin_popcount(grid[row][i]) == 1) return false;
-            grid[row][i] &= ~bitmask;
+            if (__builtin_popcount(grid[row][i]) == 1)
+            {
+                if (grid[row][i] == bitmask)
+                    return false;
+            }
+            else
+            {
+                grid[row][i] &= ~bitmask;
+            }
         }
     }
+    return true;
 }
 
 int** Solver::SolvePuzzle(int *clues)
@@ -318,7 +333,7 @@ int** Solver::SolvePuzzle(int *clues)
 								if (!PropagateConstaints(grid, row, col, bit))
 								{
 									DeleteGrid(grid);
-									return false;
+									return nullptr;
 								}
 							}
 							break;
