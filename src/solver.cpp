@@ -318,7 +318,7 @@ int** Solver::SolvePuzzle(int *clues)
 								if (!PropagateConstaints(grid, row, col, bit))
 								{
 									DeleteGrid(grid);
-									return false;
+									return nullptr;
 								}
 							}
 							break;
